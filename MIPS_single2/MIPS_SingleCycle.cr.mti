@@ -1,0 +1,75 @@
+C:/Modeltech_pe_edu_10.4a/examples/MEMandWB_Stage.v {1 {vlog -work work -stats=none C:/Modeltech_pe_edu_10.4a/examples/MEMandWB_Stage.v
+Model Technology ModelSim PE Student Edition vlog 10.4a Compiler 2015.03 Apr  7 2015
+-- Compiling module mux
+-- Compiling module DataMemoryWithMux
+-- Compiling module MEMandWB
+
+Top level modules:
+	MEMandWB
+
+} {} {}} C:/Modeltech_pe_edu_10.4a/examples/MEMandWB_TestBench.v {1 {vlog -work work -stats=none C:/Modeltech_pe_edu_10.4a/examples/MEMandWB_TestBench.v
+Model Technology ModelSim PE Student Edition vlog 10.4a Compiler 2015.03 Apr  7 2015
+-- Compiling module tb_MEMandWB
+
+Top level modules:
+	tb_MEMandWB
+
+} {} {}} C:/Modeltech_pe_edu_10.4a/examples/Decode_Stage.v {1 {vlog -work work -stats=none C:/Modeltech_pe_edu_10.4a/examples/Decode_Stage.v
+Model Technology ModelSim PE Student Edition vlog 10.4a Compiler 2015.03 Apr  7 2015
+-- Compiling module mux5bit
+-- Compiling module mux32bit
+-- Compiling module RegisterFile
+-- Compiling module ControlUnit
+-- Compiling module Decode
+
+Top level modules:
+	mux32bit
+	Decode
+
+} {} {}} C:/Modeltech_pe_edu_10.4a/examples/Execution_TestBench.v {1 {vlog -work work -stats=none C:/Modeltech_pe_edu_10.4a/examples/Execution_TestBench.v
+Model Technology ModelSim PE Student Edition vlog 10.4a Compiler 2015.03 Apr  7 2015
+-- Compiling module tb_ALU
+
+Top level modules:
+	tb_ALU
+
+} {} {}} C:/Modeltech_pe_edu_10.4a/examples/InstructionFetch_TestBench.v {1 {vlog -work work -stats=none C:/Modeltech_pe_edu_10.4a/examples/InstructionFetch_TestBench.v
+Model Technology ModelSim PE Student Edition vlog 10.4a Compiler 2015.03 Apr  7 2015
+-- Compiling module InstructionFetch_TestBench
+
+Top level modules:
+	InstructionFetch_TestBench
+
+} {} {}} C:/Modeltech_pe_edu_10.4a/examples/Decode_TestBench.v {1 {vlog -work work -stats=none C:/Modeltech_pe_edu_10.4a/examples/Decode_TestBench.v
+Model Technology ModelSim PE Student Edition vlog 10.4a Compiler 2015.03 Apr  7 2015
+-- Compiling module tb_dec
+
+Top level modules:
+	tb_dec
+
+} {} {}} C:/Modeltech_pe_edu_10.4a/examples/Execution_Stage.v {1 {vlog -work work -stats=none C:/Modeltech_pe_edu_10.4a/examples/Execution_Stage.v
+Model Technology ModelSim PE Student Edition vlog 10.4a Compiler 2015.03 Apr  7 2015
+-- Compiling module MUX
+-- Compiling module ALU
+-- Compiling module Execution
+
+Top level modules:
+	Execution
+
+} {} {}} C:/Modeltech_pe_edu_10.4a/examples/InstructionFetch.v {1 {vlog -work work -stats=none C:/Modeltech_pe_edu_10.4a/examples/InstructionFetch.v
+Model Technology ModelSim PE Student Edition vlog 10.4a Compiler 2015.03 Apr  7 2015
+-- Compiling module PC
+-- Compiling module InstMem
+-- Compiling module FetchStage
+
+Top level modules:
+	FetchStage
+
+} {} {}} C:/Modeltech_pe_edu_10.4a/examples/FetchandExecution.v {1 {vlog -work work -stats=none C:/Modeltech_pe_edu_10.4a/examples/FetchandExecution.v
+Model Technology ModelSim PE Student Edition vlog 10.4a Compiler 2015.03 Apr  7 2015
+-- Compiling module DecodeExecutionTB
+
+Top level modules:
+	DecodeExecutionTB
+
+} {} {}}
