@@ -1,1 +1,1 @@
-# MIPSProcessor
+# MIPS Pipeline Processor
