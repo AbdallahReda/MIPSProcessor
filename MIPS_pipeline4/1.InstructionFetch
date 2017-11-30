@@ -11,7 +11,7 @@ always@(posedge Clk)
 
 begin
 if(PCSrc==1) begin OutputAddress<=(InputAddress+4); end
-else if(stallMuxSelector==0) begin OutputAddress <= (OutputAddress)-4; end
+else if(stallMuxSelector==0) begin OutputAddress <= (OutputAddress); end
 //if(stallMuxSelector!=0) begin OutputAddress <= OutputAddress + 4; end
 else begin OutputAddress <= OutputAddress + 4; end
 end 
@@ -53,14 +53,14 @@ initial begin 	for(i=0;i<(2**8);i=i+1) begin InstrucionMem[i]<=0; end
 		//InstrucionMem[5]  <= 32'b00000010000100010110100000100000;//lw $s0, 17(0)
 		
 		//InstrucionMem[6]  <= 32'b00000001001010100100000000100000; //sw $t0,0($t0)
-		      InstrucionMem[0]  <= 32'b10001110011100100000000000010100;
+		      InstrucionMem[0]  <= 32'b10001110011100010000000000010100;
 				       //000000_00000_00000_00000_00000000000
 		//InstrucionMem[4]  <= 32'b10001101000100010000000000000000;//sw $t0,0($s1)
 		     //InstrucionMem[1]  <= 32'b00000010010100101000000000100000;
 		    // InstrucionMem[2]  <= 32'b00000001000010000100100000100000; 
-		  InstrucionMem[1]  <= 32'b10001110010100010000000000000000;
-		  InstrucionMem[2]  <= 32'b10001110001010000000000000000000;
-		  InstrucionMem[3]  <= 32'b00000010001100011000000000100000;
+		  InstrucionMem[1]  <= 32'b10001110001010000000000000000000;
+		  InstrucionMem[2]  <= 32'b10001101000100100000000000000000;
+		  InstrucionMem[3]  <= 32'b00000010010100011000000000100000;
 		//InstrucionMem[2]=32'b00000010100101011001100000100000;
 		//InstrucionMem[3]=32'b00000001000010000100000000100010;
 		//InstrucionMem[0]  <= 32'b00000001010010110100100000100000;
@@ -78,7 +78,7 @@ end
 
 //always @(posedge Clk) begin if(WriteEnable) begin InstrucionMem[PCaddress>>2] <= WriteData;end end
 initial begin ReadData<=0; end
-always @(posedge Clk) begin ReadData <= InstrucionMem[PCaddress>>2];end //Read from InstMem @ negedge
+always @(negedge Clk) begin ReadData <= InstrucionMem[PCaddress>>2];end //Read from InstMem @ negedge
 
 endmodule
 

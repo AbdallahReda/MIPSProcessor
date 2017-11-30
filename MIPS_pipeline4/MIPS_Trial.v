@@ -87,13 +87,14 @@ module MIPS(Clk,WriteData,WriteEnable,ReadData1,ReadData2,FromMUXtoREG,ALUresult
 		end
 	
 	always @(posedge Clk) begin 
-              if(stallMuxSelector==1) begin IFIDIR<=ReadData;   end 
+              if(stallMuxSelector==1) begin IFIDIR<=ReadData;   end IFIDPC<=OutputAddress;
 		 //IFID PIPLINE REGISTER
  			//$monitor(" WriteReg=%d EXEMEMWriteReg =%d,memRegWrite = %d",WriteReg,EXEMEMWriteReg ,MEMWBWriteReg);
 				//$monitor("ForwardA=%d ForwardB=%d ForwardAout=%d ForwardBout=%d EXMEMALUResult=%d",ForwardA,ForwardB,ForwardAout,ForwardBout,EXMEMALUResult);
 			//$monitor("%d stallSelector=%d OutputAddress=%d EXMEMALUResult=%d ALUresult=%d ForwardAout=%d ForwardBout=%d IDEXControlLines=%b ",Clk,stallMuxSelector,OutputAddress,EXMEMALUResult,ALUresult,ForwardAout,ForwardBout,ForwardA,ForwardB,IDEXControlLines);
 			//$monitor(" Clk=%d MEMWBALUResult=%d MEMWBMEMRead=%d MEMWBControlLines[4]=%d FromMUXtoREG=%d EXMEMALUResult=%d ALUresult=%d  ",Clk,MEMWBALUResult,MEMWBMEMRead,MEMWBControlLines[4],FromMUXtoREG,EXMEMALUResult,ALUresult);
-				$monitor($time,,"%d IDEXControlLines=%b IFIDIR=%x ReadData=%x stallMuxSelector=%d OutputAddress=%d",Clk,IDEXControlLines,IFIDIR,ReadData,stallMuxSelector,OutputAddress);
+				//$monitor($time,,"%d IDEXControlLines=%b IFIDIR=%x ReadData=%x stallMuxSelector=%d OutputAddress=%d",Clk,IDEXControlLines,IFIDIR,ReadData,stallMuxSelector,OutputAddress);
+			$monitor($time,,"%d stallMuxSelector=%d ",Clk,stallMuxSelector);
 			
 					//IDEX PIPLINE REGISTER
 			/*IDEXPC<=IFIDPC;
@@ -102,7 +103,7 @@ module MIPS(Clk,WriteData,WriteEnable,ReadData1,ReadData2,FromMUXtoREG,ALUresult
 			IDEXControlLines<=ControlLines;
 			IDEXrt<=IFIDIR[20:16];IDEXrd<=IFIDIR[15:11];
 			IDEXImmediate<={{16{IFIDIR[15]}},IFIDIR[15:0]};*/
-			IFIDPC<=OutputAddress;
+			
 				//EXMEM PIPLINE REGISTER
 			EXMEMControlLines<=IDEXControlLines;
 			EXMEMALUResult<=ALUresult;
@@ -117,7 +118,7 @@ module MIPS(Clk,WriteData,WriteEnable,ReadData1,ReadData2,FromMUXtoREG,ALUresult
 			MEMWBrs<=EXMEMrs; MEMWBrt<=EXMEMrt;
 
 				end
-	always @(posedge Clk or ReadData1 or ReadData2) // wiered fash55555555
+	always @(negedge Clk or ReadData1 or ReadData2) // wiered fash55555555
 		 begin
 		IDEXPC<=IFIDPC; 
 		IDEXReadData1<=ReadData1;
@@ -129,40 +130,18 @@ module MIPS(Clk,WriteData,WriteEnable,ReadData1,ReadData2,FromMUXtoREG,ALUresult
 
 		end 
 
-	/*always @(* )
-		begin
-		
-		if (EXMEMControlLines[11] == 1 && EXEMEMWriteReg == IDEXrs) begin ForwardA <= 2; end
-		if (EXMEMControlLines[11] == 1 && EXEMEMWriteReg == IDEXrt) begin ForwardB <= 2; end
-		else begin ForwardA<=0;ForwardB<=0; end
-		end*/
-
-	assign ForwardA=( (EXMEMControlLines[11] == 1 ) && EXEMEMWriteReg == IDEXrs )?2:
+	assign ForwardA=((EXMEMControlLines[11] == 1 ) && EXEMEMWriteReg == IDEXrs )?2:
 			((MEMWBControlLines[11] == 1 && MEMWBWriteReg == IDEXrs)&& (EXEMEMWriteReg != IDEXrs || EXMEMControlLines[11] == 0))?1:0;
 	
 	assign ForwardB=( (EXMEMControlLines[11] == 1 || EXMEMControlLines[9]==1) && EXEMEMWriteReg == IDEXrt)?2:
 			((MEMWBControlLines[11]==1 && MEMWBWriteReg == IDEXrt) && (EXEMEMWriteReg != IDEXrt || EXMEMControlLines[11] == 0))?1:0;
 
 	assign ForwardC=(MEMWBrt==EXMEMrt&& MEMWBControlLines[3]==EXMEMControlLines[9] && MEMWBControlLines[11]==1)?0:1;
-	/*FetchStage Fetch(Clk,WriteData,ReadData,WriteEnable,InputAddress,OutputAddress,PCSrc);
+	
 
-	Decode Dec(Clk,ReadData,ControlLines,FromMUXtoREG,ReadData1,ReadData2,shamt,ImmediateField,PCSrc,InputAddress,OutputAddress,rt,rd,WriteReg);
-
-	Execution Exexcution(ReadData1,ReadData2,ControlLines[8:5],shamt,ControlLines[10],ImmediateField,ALUresult,zeroflag,overFlow,rd,rt,WriteReg,ControlLines[0]);
-
-	MEMandWB MEM(ALUresult,ReadData2,ControlLines[4],ControlLines[3],ControlLines[9],Clk,MemtoMux);
-
-	mux hh(ALUresult,MemtoMux,ControlLines[4],FromMUXtoREG);*/
-
-	/*FetchStage Fetch(Clk,WriteData,ReadData,WriteEnable,InputAddress,OutputAddress,PCSrc);
-	Decode Dec(Clk,IFIDIR,ControlLines,FromMUXtoREG,ReadData1,ReadData2,shamt,ImmediateField,PCSrc,InputAddress,IFIDPC,rt,rd,MEMWBWriteReg,MEMWBControlLines[11]);
-	Execution Exexcution(IDEXReadData1,IDEXReadData2,IDEXControlLines[8:5],IDEXImmediate[10:6],IDEXControlLines[10],IDEXImmediate,ALUresult,zeroflag,overFlow,IDEXrd,IDEXrt,WriteReg,IDEXControlLines[0]);
-	MEMandWB MEM(EXMEMALUResult,EXMEMWReadData2,EXMEMControlLines[4],EXMEMControlLines[3],EXMEMControlLines[9],Clk,MemtoMux);
-	mux hh(MEMWBALUResult,MEMWBMEMRead,MEMWBControlLines[4],FromMUXtoREG);*/
 	
 	assign stallMuxSelector= ( (IDEXControlLines[3] == 1) && (IDEXrt == IFIDIR[25:21] || IDEXrt == IFIDIR[20:16]) )?0:1;
-	//if (ID/EX.MemRead = 1 and (ID/EX.RegisterRt = IF/ID.RegisterRs or ID/EX.RegisterRt = IF/ID.RegisterRt))
-
+	
 
 
 	FetchStage Fetch(Clk,WriteData,ReadData,WriteEnable,InputAddress,OutputAddress,PCSrc,stallMuxSelector);
