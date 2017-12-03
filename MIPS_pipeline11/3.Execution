@@ -28,9 +28,9 @@ module ALU(Result,overFlow, A,B,op,shamt,zero);
 		(op==1) ? (A-B) : /*subtract*/
 		(op==2) ? (A&B) : /*and*/
 		(op==3) ? (A|B) : /*or*/
-		(op==4) ? (A << shamt) : /*shift left*/
-		(op==5) ? (A >> shamt) : /*shift right logical*/
-		(op==6) ? $signed ($signed(A) >>> shamt)  : /*shift right arithmatic*/
+		(op==4) ? (B << shamt) : /*shift left*/
+		(op==5) ? (B >> shamt) : /*shift right logical*/
+		(op==6) ? $signed ($signed(B) >>> shamt)  : /*shift right arithmatic*/
 		(op==7) ? ($signed(A)>$signed(B) ? (1):32'b0  ) : /*check .. if A>B print 1 .. else print0*/
 		(op==8) ? ($signed(A)<$signed(B) ? (1):32'b0  ) :  /*check .. if A<B print 1 .. else print0*/
 		(op==9) ? (B<<16):
