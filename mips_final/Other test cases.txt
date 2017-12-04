@@ -1,0 +1,2 @@
+You will find the test cases found in this folder and another test cases in the Test-Cases.pdf inside the Documentations folder
+each test case has its screenshot
