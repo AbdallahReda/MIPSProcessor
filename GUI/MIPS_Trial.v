@@ -214,7 +214,7 @@ module MIPS_TB; //TEST BENCH of our TOP MODULE MIPS
 always begin #10 Clk=~Clk; end // Clk cycle is 20ns
 initial begin
 	Clk<=0;
-	$monitor($time,"Clk=%d ReadData1=%d ReadData2=%d FromMUXtoREG=%d ALU=%d  ControlLines=%b ",Clk,ReadData1,ReadData2,FromMUXtoREG,ALUresult,ControlLines);
+	$monitor($time,"Clk=%d ReadData1=%d ReadData2=%d FromMUXtoREG=%d ALU=%d ",Clk,ReadData1,ReadData2,FromMUXtoREG,ALUresult);
 	
 	#500 $finish; //finish the simulation to terminate the monitor of GUI
 	end
