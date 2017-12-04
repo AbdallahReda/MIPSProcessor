@@ -41,16 +41,16 @@ def main(argv):
 
 
 root = Tkinter.Tk(className="CO Project")
-
+#root.geometry('{}x{}'.format(50, 150))
 root.grid_columnconfigure(0, weight = 1)
 root.grid_columnconfigure(0, weight = 1)
-root.grid_rowconfigure(0, weight = 0)
-root.grid_rowconfigure(3, weight = 0)
-Tkinter.Label(root, height = '2', text = 'Assembly Code').grid(row =0,column = 0)
+root.grid_rowconfigure(1, weight = 1)
+root.grid_rowconfigure(3, weight = 1)
+Tkinter.Label(root, height = '2', text = 'Input').grid(row =0,column = 0)
 Tkinter.Label(root, height = '2', text = 'Simulation Output').grid(row =2,column = 0)
-input_asm = ScrolledText(root)
+input_asm = ScrolledText(root,height = '17')
 input_asm.grid(row = 1, column = 0, sticky = N+S+W+E)
-output_monitor = ScrolledText(root, state= 'disabled')
+output_monitor = ScrolledText(root,height = '12', state= 'disabled')
 output_monitor.grid(row = 3, column = 0, sticky = N+S+W+E)
 
 # create a menu & define functions for each menu item
