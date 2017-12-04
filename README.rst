@@ -65,6 +65,7 @@ This GUI is used for creating input files for our MIPS Verilog project such as i
 To run the gui you can run this command from the bash terminal or windows power shell
 
 ::
+
 python2 assembly.py
 
 Contents Of Documentations
