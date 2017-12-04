@@ -165,7 +165,7 @@ module MIPS(Clk,ReadData1,ReadData2,FromMUXtoREG,ALUresult); //our TOP MODULE MI
 	assign ForwardE=(ControlLines[2] && (MEMWBWriteReg!=0)    && (MEMWBWriteReg  == IFIDIR[20:16]) && MEMWBControlLines[3])?2:
 		        (ControlLines[2] && (EXEMEMWriteReg != 0) && (EXEMEMWriteReg == IFIDIR[20:16]) && ForwardD!=2 /*&&~MEMWBControlLines[3]*/)?1:0;
 
-	FetchStage Fetch(Clk,WriteData,ReadData,WriteEnable,InputAddress,OutputAddress,PCSrc,stallDetector);
+	FetchStage Fetch(Clk,ReadData,InputAddress,OutputAddress,PCSrc,stallDetector);
 	Decode Dec(Clk,IFIDIR,ControlLines,FromMUXtoREG,ReadData1,ReadData2,shamt,ImmediateField,PCSrc,InputAddress,IFIDPC,rt,rd,MEMWBWriteReg,MEMWBControlLines[11],ForwardD,ForwardE,EXMEMALUResult,MemtoMux,jumpRegDetection,MEMWBoverflow);
 	Execution Exexcution(ForwardAout,ForwardBout,IDEXControlLines[8:5],IDEXImmediate[10:6],IDEXControlLines[10],IDEXImmediate,ALUresult,zeroflag,overFlow,IDEXrd,IDEXrt,WriteReg,IDEXControlLines[0]);
 	MEMandWB MEM(EXMEMALUResult,ForwardCout,EXMEMControlLines[4],EXMEMControlLines[3],EXMEMControlLines[9],Clk,MemtoMux);
