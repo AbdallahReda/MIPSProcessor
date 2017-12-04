@@ -27,7 +27,7 @@ module RegisterFile(Clk, WriteEnb, ReadReg1, ReadReg2, WriteReg, ReadData1, Read
 
 initial begin      //initialize the Regfile automatically from a txt file or manually 
 
-		$readmemh("regs.txt", Registers); //Incase if you would to fill regfile form outside txt file
+	$readmemh("regs.txt", Registers); //Incase if you would to fill regfile form outside txt file
 
 		/*Registers[zero]<= 0; //Incase if you would to fill regfile manually
 		Registers[at]  <= 0; 
@@ -103,20 +103,23 @@ output reg [11:0]ControlLines; //Control lines are 12bits not as standard becaus
 //ALUOp[3:0]={ControlLines[8],ControlLines[7],ControlLines[6],ControlLines[5]}; We make ALUOp 4bits as we explained 
 //MemWrite  =ControlLines[9]; //ALUSrc    =ControlLines[10];
 //RegWrite  =ControlLines[11]; 
+
 	
-always@(Instruction)//Enter this block @ each instruction change
+always@(Instruction or Opcode or Fn)//Enter this block @ each instruction change
 	begin
 		case(Opcode)	
-						0: //R-FORMAT supported instructions 	
-						if(Fn==32) begin ControlLines<=12'b100_0000_00001; end//ADD
-						else if(Fn==36) begin ControlLines<=12'b100_0010_00001; end//AND
-						else if(Fn==34) begin ControlLines<=12'b100_0001_00001;	end//SUB
-						else if(Fn==37) begin ControlLines<=12'b100_0011_00001;	end//OR
-						else if(Fn==0)  begin ControlLines<=12'b100_0100_00001;	end//SLL
-						else if(Fn==42) begin ControlLines<=12'b100_1000_00001;	end//SLT
-						else if(Fn==2)  begin ControlLines<=12'b100_0101_00001;	end//SRL
-						else if(Fn==3)  begin ControlLines<=12'b100_0110_00001;	end//SRA 
-						else if(Fn==8)	begin ControlLines<=12'b000_0000_00010;	end//Jr
+			0:  	//R-FORMAT supported instructions 	
+				if(Fn==32) begin ControlLines<=12'b100_0000_00001; end//ADD
+				else if(Fn==36) begin ControlLines<=12'b100_0010_00001; end//AND
+				else if(Fn==34) begin ControlLines<=12'b100_0001_00001;	end//SUB
+				else if(Fn==37) begin ControlLines<=12'b100_0011_00001;	end//OR
+				else if(Fn==0)  begin ControlLines<=12'b100_0100_00001;	end//SLL
+				else if(Fn==42) begin ControlLines<=12'b100_1000_00001;	end//SLT
+				else if(Fn==2)  begin ControlLines<=12'b100_0101_00001;	end//SRL
+				else if(Fn==3)  begin ControlLines<=12'b100_0110_00001;	end//SRA 
+				else if(Fn==8)	begin ControlLines<=12'b000_0000_00010;	end//Jr
+				else if(Fn==39)	begin ControlLines<=12'b100_1010_00001;	end//NOR
+				else if(Fn==38)	begin ControlLines<=12'b100_1011_00001;	end//XOR
 						
 				//I-Format supported instructions 						
 			4:  ControlLines<=12'b000_0001_00100; //BEQ
@@ -128,6 +131,7 @@ always@(Instruction)//Enter this block @ each instruction change
 			13: ControlLines<=12'b110_0011_00000; //ORI
 			10: ControlLines<=12'b110_1000_00000; //SLTI
 			15: ControlLines<=12'b110_1001_00000; //LUI
+			14: ControlLines<=12'b110_1011_00000; //XORI
 
 				//J-Format supported instructions 	
 			2:  ControlLines<=12'b000_0000_00010; //J
@@ -140,7 +144,6 @@ endmodule
  
 module Decode(Clk,Instruction,ControlLines,DataMEMtoReg,ReadData1,ReadData2,shamt,ImmediateField,PCSrc,NextAddress,InputAddress,rt,rd,WriteReg,WriteRegEnable,ForwardD,ForwardE,EXMEMALUResult,MemtoMux,jumpRegDetection,MEMWBoverflow);
 //this is the Topmodule for the DECODE stage  
-//we calculated the branch and jump addresses in this module
 
 input wire Clk; //Clk signal
 input wire [31:0]Instruction; //Instruction that comes from FETCH stage 
@@ -179,50 +182,61 @@ assign raReturnAddress=31;//the 31 number is just the address of $ra Register th
 
 wire [31:0]BranchAddress;//a 32bit wire that is defined to hold the branch address 
 
-wire BranchComparator;//the ouptut of comparison between the two operands of "Beq,Bne" instructions
-
+wire BranchComparator;//the ouptut of comparison between the two operands of "Beq" instructions
+wire bneComparator;//the ouptut of comparison between the two operands of "Bne" instructions
 wire [31:0]BranchComparatorInput1,BranchComparatorInput2;//the two operands of "Beq,Bne" instructions
 
-wire [31:0] jumpAddress;
+wire [31:0] jumpAddress;//a 32bit wire that is defined to hold the jump address 
+wire [31:0]jumpRegAddress;//a 32bit wire that is defined to hold the "jr" address 
 
-wire [31:0]jumpRegAddress;
-wire bneComparator;
 
-assign rt=Instruction[20:16];
-assign rd=Instruction[15:11];
+assign rt=Instruction[20:16];//These are the Addresses of destsination registers ,
+assign rd=Instruction[15:11];//rd in case if R-Format or rt in case of I-Format
 
-assign BranchComparator=(BranchComparatorInput1==BranchComparatorInput2)?1:0;
-assign bneComparator=(BranchComparatorInput1!=BranchComparatorInput2)?1:0;
+assign BranchComparator=(BranchComparatorInput1==BranchComparatorInput2)?1'b1:1'b0;//the output is 1 if the condtion of beq is true
+assign bneComparator=(BranchComparatorInput1!=BranchComparatorInput2)?1'b1:1'b0;//the output is 1 if the condtion of bne is true
 
 assign PCSrc = (((BranchComparator||bneComparator) & ControlLines[2])||ControlLines[1]);
+		//this signal set to 1 if the instructions are jump "j,jal,jr" 
+		// it also set to 1 if the instructions are branch "beq,bne" when
+		// the condititons of this instructions become TRUE
 
 assign BranchAddress=(InputAddress)+(ImmediateField<<2);
-assign shamt=Instruction[10:6];
+		//Calculating the Branch adddress by adding the current address (PC) to the immediate offset 16bits
+		//after shifting it left by 2 (Multiply the offset by 4)
+
+//assign shamt=Instruction[10:6]; //shift amount value that used in Shift instructions
+	
 assign ImmediateField={ {16{Instruction[15]}}, Instruction[15:0] };
+		//Sign extend the immediate field to be 32bits instead of 16bits
 
 assign jumpAddress={ {InputAddress[31:28]},{Instruction[25:0]<<2}}; //asebha zai ma hya ? walla an2s 4???
+		//Calculating the jump adddress by adding the most sig bits of current address (PC)
+		 //to the immediate offset 26bits  after shifting it left by 2 (Multiply the offset by 4)
 
+assign jumpRegDetection=(Instruction[5:0]==8 && Instruction[31:26]==0)?1'b1:1'b0;
+		//Detect wether the signal is Jr or not by checking the opcode and the Fn of the fetched instruction
 
-assign jumpRegDetection=(Instruction[5:0]==8 && Instruction[31:26]==0)?1:0;
 assign jumpRegAddress=jumpRegDetection?BranchComparatorInput1:jumpAddress;
+		//Detetrmine wether to take the jump address from the forwarding unit in case of hazard
+		//or calculating it from PC as normal
 
+ControlUnit CU(Instruction[5:0],Instruction[31:26],ControlLines,Instruction);//definig an instant of Control unit
 
-
-
-
-
-ControlUnit CU(Instruction[5:0],Instruction[31:26],ControlLines,Instruction);
-RegisterFile RegFile(Clk,WriteRegEnable,Instruction[25:21],Instruction[20:16],WriteReg,ReadData1,ReadData2,DataMEMtoReg,Instruction[31:26],InputAddress,raReturnAddress,MEMWBoverflow);
+RegisterFile RegFile(Clk,WriteRegEnable,Instruction[25:21],Instruction[20:16],WriteReg,ReadData1,ReadData2,DataMEMtoReg,Instruction[31:26],InputAddress,raReturnAddress,MEMWBoverflow); //definig an instant of Regfile 
 
 mux3inputs beqForwardD(ReadData1,EXMEMALUResult,MemtoMux,ForwardD,BranchComparatorInput1);
-mux3inputs beqForwardE(ReadData2,EXMEMALUResult,MemtoMux,ForwardE,BranchComparatorInput2);
-mux2inputs jumpMux(BranchAddress,jumpRegAddress,ControlLines[1],NextAddress);
+	//for the instructions that have Read after write dependencies,we explain the selector states before
 
+mux3inputs beqForwardE(ReadData2,EXMEMALUResult,MemtoMux,ForwardE,BranchComparatorInput2);
+	//like the previous mux but for the second operand of camparison
+
+mux2inputs jumpMux(BranchAddress,jumpRegAddress,ControlLines[1],NextAddress);
+	//mux used to send the branch address or jumpreg address to the FETCH stage 
+
+//some monitors to trace bugs and issues if found
 //initial begin $monitor($time,,"%d ForwardD=%d ForwardE=%d BranchComparatorInput1=%d BranchComparatorInput2=%d BranchComparator=%d MemtoMux=%d PCSrc=%d Instruction=%b jumpAddress=%d jumpRegAddress=%d",Clk,ForwardD,ForwardE,BranchComparatorInput1,BranchComparatorInput2,BranchComparator,MemtoMux,PCSrc,Instruction,jumpAddress); end
-//Instruction=%b
-initial begin $monitor($time,,"%d  jumpRegDetection=%b PCSrc=%d ForwardD=%d ForwardE=%d jumpAddress=%d jumpRegAddress=%d Instruction[10:6]=%b",Clk,jumpRegDetection,PCSrc,ForwardD,ForwardE,jumpAddress,jumpRegAddress,Instruction[10:6]); end
+//initial begin $monitor($time,,"%d  jumpRegDetection=%b PCSrc=%d ForwardD=%d ForwardE=%d jumpAddress=%d jumpRegAddress=%d Instruction[10:6]=%b",Clk,jumpRegDetection,PCSrc,ForwardD,ForwardE,jumpAddress,jumpRegAddress,Instruction[10:6]); end
 
 endmodule
-
-
 
