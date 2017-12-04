@@ -52,8 +52,10 @@ reg [31:0] InstructionMem [0:MemDepth];//the width of instruction memory , here 
 
 integer i;
 
-initial begin 	
-		$readmemh("inst_mem.txt", InstructionMem); //Incase if you would to fill data instruction form outside txt file
+initial begin 		
+			//Incase if you would to fill data instruction form outside txt file
+		$readmemh("inst_mem.txt", InstructionMem); //
+		//$readmemb("inst_mem.txt", InstructionMem); //
 		
 
 		//for(i=0;i<(2**8);i=i+1) begin InstructionMem[i]<=0; end //initializing the instruction memory with zeroes
