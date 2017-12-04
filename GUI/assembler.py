@@ -193,7 +193,7 @@ exportmenu = Menu(menu)
 menu.add_cascade(label="Export", menu=exportmenu)
 exportmenu.add_command(label="Machine code", command=export_2)
 exportmenu.add_command(label="Instruction memory", command=export_inst)
-exportmenu.add_command(label="Reggister file", command=export_reg)
+exportmenu.add_command(label="Register file", command=export_reg)
 exportmenu.add_command(label="Data memory", command=export_mem)
 
 helpmenu = Menu(menu)
