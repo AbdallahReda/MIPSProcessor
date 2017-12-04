@@ -10,7 +10,7 @@ reg [31:0] Memory [0:MemDepth]; //the width of data memory , here it will be 32
 
 integer i;
 initial begin 		
-		//$readmemb("datamem.txt",Memory); //Incase if you would to fill data memory form outside txt file
+		//$readmemb("data_mem.txt",Memory); //Incase if you would to fill data memory form outside txt file
 
 		for(i=0;i<(2**8);i=i+1) begin Memory[i]<=0; end //initializing the Data memory with zeroes
 		
