@@ -3,15 +3,15 @@
 //2:wire [31:0]DataMEMtoReg;
 //3:wire [31:0]BranchAddress;
 
-module MIPS(Clk/*,ReadData1,ReadData2,FromMUXtoREG,ALUresult*/); //our TOP MODULE MIPS
+module MIPS(Clk,ReadData1,ReadData2,FromMUXtoREG,ALUresult); //our TOP MODULE MIPS
 
 	input wire Clk ; // Clk signal
 
 			//Defining these signals as outputs to monitor them at TEST BENCH
-	  wire [31:0]FromMUXtoREG;
-	    wire [31:0]ReadData2;
-	   wire [31:0]ReadData1;
-	   wire [31:0]ALUresult;    //ALU output
+	 output wire [31:0]FromMUXtoREG;
+	    output wire [31:0]ReadData2;
+	  output wire [31:0]ReadData1;
+	   output wire [31:0]ALUresult;    //ALU output
 
 	//wire [31:0]DataMEMtoReg;	// form data  mem to reg
 	//wire [31:0]BranchAddress;
@@ -203,10 +203,10 @@ endmodule
 
 module MIPS_TB; //TEST BENCH of our TOP MODULE MIPS
 	reg Clk;
-	/*wire [31:0]ReadData1;
+	wire [31:0]ReadData1;
 	wire [31:0]ReadData2;	
 	wire [31:0]FromMUXtoREG;
-	wire [31:0]ALUresult;*/
+	wire [31:0]ALUresult;
 
 	MIPS MIPS1(Clk/*,ReadData1,ReadData2,FromMUXtoREG,ALUresult*/);
 
@@ -214,9 +214,9 @@ module MIPS_TB; //TEST BENCH of our TOP MODULE MIPS
 always begin #10 Clk=~Clk; end // Clk cycle is 20ns
 initial begin
 	Clk<=0;
-	//$monitor($time,"Clk=%d ReadData1=%d ReadData2=%d FromMUXtoREG=%d ALU=%d  ControlLines=%b ",Clk,ReadData1,ReadData2,FromMUXtoREG,ALUresult,ControlLines);
+	$monitor($time,"Clk=%d ReadData1=%d ReadData2=%d FromMUXtoREG=%d ALU=%d  ControlLines=%b ",Clk,ReadData1,ReadData2,FromMUXtoREG,ALUresult,ControlLines);
 	
-	//#500 $finish; //finish the simulation to terminate the monitor of GUI
+	#500 $finish; //finish the simulation to terminate the monitor of GUI
 	end
 
 endmodule
