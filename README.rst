@@ -64,9 +64,10 @@ GUI
 This GUI is used for creating input files for our MIPS Verilog project such as instruction memory, data memory and register file. The app is integrated with iVerilog to simulate the Verilog modules and show output results. It is also can be used on Windows and Linux  operating systems.
 To run the gui you can run this command from the bash terminal or windows power shell
 
+
 ::
 
-python2 assembly.py
+    python2 assembly.py
 
 Contents Of Documentations
 --------------------------
