@@ -69,13 +69,7 @@ endcase
 end
 endmodule
 
-
-
-
-
-
-//MUX
-module MUX (Result,wd,MUXCtrl,WriteData);
+module MUX1 (Result,wd,MUXCtrl,WriteData);
 	input[31:0] Result,wd;
 	input MUXCtrl;
 
