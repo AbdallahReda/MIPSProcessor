@@ -27,7 +27,7 @@ module RegisterFile(Clk, WriteEnb, ReadReg1, ReadReg2, WriteReg, ReadData1, Read
 
 initial begin      //initialize the Regfile automatically from a txt file or manually 
 
-		//$readmemh("regfile.txt", Registers); //Incase if you would to fill regfile form outside txt file
+	//$readmemh("regs.txt", Registers); //Incase if you would to fill regfile form outside txt file
 
 		Registers[zero]<= 0; //Incase if you would to fill regfile manually
 		Registers[at]  <= 0; 
