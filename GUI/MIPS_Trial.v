@@ -208,7 +208,7 @@ module MIPS_TB; //TEST BENCH of our TOP MODULE MIPS
 	wire [31:0]FromMUXtoREG;
 	wire [31:0]ALUresult;
 
-	MIPS MIPS1(Clk/*,ReadData1,ReadData2,FromMUXtoREG,ALUresult*/);
+	MIPS MIPS1(Clk,ReadData1,ReadData2,FromMUXtoREG,ALUresult);
 
 	
 always begin #10 Clk=~Clk; end // Clk cycle is 20ns
