@@ -11,8 +11,8 @@ Intro
 | 3.Abdelrahman Ibrahim
 | 4.Abdelrahman Mahmoud
 | 5.Abdallah Reda
-
-The aim of this project is to simulate a pipelined MIPS processor dealing with various MIPS instructions.
+|
+|The aim of this project is to simulate a pipelined MIPS processor dealing with various MIPS instructions.
 
 This Project is supporting data hazards, control hazards for LW, BEQ and R-Format instructions.
 
