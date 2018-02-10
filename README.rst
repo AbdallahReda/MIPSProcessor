@@ -5,7 +5,7 @@ Intro
 
 This project is made by a group of students at 3rd year Computer and systems department students at Faculty of Engineering Ain Shams University. This is a complete rewrite in (Verilog HDL). 
 
-#Group Names:
+**#Group Names:**
 1.Samuel Medhat
 2.Diaa Ahmed
 3.Abdelrahman Ibrahim
