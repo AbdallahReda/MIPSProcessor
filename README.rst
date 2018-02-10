@@ -6,13 +6,13 @@ Intro
 | This project is made by a group of students at 3rd year Computer and systems department students at Faculty of Engineering Ain | Shams University. This project is written completely in **Verilog HDL**. 
 |
 | **#Group Names:**
-| 1.Samuel Medhat
-| 2.Diaa Ahmed
-| 3.Abdelrahman Ibrahim
-| 4.Abdelrahman Mahmoud
-| 5.Abdallah Reda
+| - Samuel Medhat
+| - Diaa Ahmed
+| - Abdelrahman Ibrahim
+| - Abdelrahman Mahmoud
+| - Abdallah Reda
 |
-|The aim of this project is to simulate a pipelined MIPS processor dealing with various MIPS instructions.
+| The aim of this project is to simulate a pipelined MIPS processor dealing with various MIPS instructions.
 
 This Project is supporting data hazards, control hazards for LW, BEQ and R-Format instructions.
 
